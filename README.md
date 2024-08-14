@@ -1,8 +1,8 @@
 # List All Courses #
 
-TODO Describe the plugin shortly here.
+Block List All Courses
 
-TODO Provide more detailed description here.
+This block will display all the Activities in course page. It will display activity information like activity completed or not and grade if the activity has grade option in activity page. In remaining contexts it will display all course list and no of users enrolled in that course and no  of users completed that course.
 
 ## Installing via uploaded ZIP file ##
 

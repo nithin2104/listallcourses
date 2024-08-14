@@ -19,15 +19,14 @@
  *
  * @package     block_listallcourses
  * @category    admin
- * @copyright   2024 Nithin kumar <nithin54@example.com>
+ * @copyright   2024 Nithin kumar <nithin54@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
-        // TODO: Define the plugin settings page - {@link https://docs.moodle.org/dev/Admin_settings}.
+        // Define the plugin settings page - {@link https://docs.moodle.org/dev/Admin_settings}.
     }
 }

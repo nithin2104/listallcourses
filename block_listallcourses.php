@@ -18,13 +18,18 @@
  * Block listallcourses is defined here.
  *
  * @package     block_listallcourses
- * @copyright   2024 Nithin kumar <nithin54@example.com>
+ * @copyright   2024 Nithin kumar <nithin54@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * Summary of block_listallcourses
  */
 class block_listallcourses extends block_base {
 
     /**
      * Initializes class member variables.
+     * Setting Title of the page
      */
     public function init() {
         // Needed by Moodle to differentiate between blocks.
@@ -37,11 +42,10 @@ class block_listallcourses extends block_base {
      * @return stdClass The block contents.
      */
     public function get_content() {
-        global $DB,$USER,$CFG,$OUTPUT,$PAGE;
+        global $DB, $USER, $CFG, $OUTPUT, $COURSE;
 
-        $PAGE->requires->js('/blocks/listallcourses/js/jquery-3.7.1.min.js');
-        $PAGE->requires->js('/blocks/listallcourses/js/main.js');
-        $PAGE->requires->css('/blocks/listallcourses/style/styles.css');
+        $this->page->requires->js_call_amd('block_listallcourses/main');
+        $this->page->requires->css('/blocks/listallcourses/style/styles.css');
 
         if ($this->content !== null) {
             return $this->content;
@@ -51,65 +55,32 @@ class block_listallcourses extends block_base {
             $this->content = '';
             return $this->content;
         }
+        $context = $this->page->context;
 
-        // $this->content->text = $text;
+        $renderable = new \block_listallcourses\output\main($context);
+        $renderer = $this->page->get_renderer('block_listallcourses');
+
         $this->content = new stdClass();
-
-        if (!empty($this->config->text)) {
-            $this->content->text = $this->config->text;
-        } else {
-
-            $sql = 'SELECT * FROM {course} WHERE id <> ?';
-            $result = $DB->get_records_sql($sql, [1]);
-            // print_r($result);
-            // $slno = 0;
-            // $table = new html_table();
-            // $table->head = array(get_string('slno', 'block_listallcourses'), get_string('courseid', 'block_listallcourses'), get_string('coursename', 'block_listallcourses'));
-            // $table->attributes['class'] = 'generaltable myclass';
-            // foreach ($result as $course) {
-            //     $slno += 1;
-            //     $courseId= $course->id;
-            //     $courseName = $course->fullname;
-            //     $table->data[] = new html_table_row(array($slno, $courseId, $courseName));
-            // }
-            // $filter = '
-            // <div class="filter">
-            // <span>Course Type </span>
-            // <select name="status" id="status">
-            // <option value="-1">All</option>
-            // <option value="1">Active</option>
-            // <option value="0">Deactive</option>
-            // </select>
-            // </div>
-            // ';
-            // $text = $filter;
-            // $text .= '<div class="mytable">';
-            // $text .= html_writer::table($table);
-            // $text .= '</div>';
-            // $result = $_POST['result'];
-            // var_dump($result);
-            // die;
-            $records = (object)[
-                'records'=> array_values($result),
-            ];
-            $this->content->text = $OUTPUT->render_from_template('block_listallcourses/list', $records);
-        }
+        $this->content->text = $renderer->render($renderable);
+        $this->content->footer = '';
 
         return $this->content;
     }
-
     /**
-     * Defines configuration data.
-     *
-     * The function is called immediately after init().
+     * Summary of specialization
+     * Setting page title in different contexts
+     * @return void
      */
     public function specialization() {
 
         // Load user defined title and make sure it's never empty.
-        if (empty($this->config->title)) {
-            $this->title = get_string('pluginname', 'block_listallcourses');
+        $titlecontext = $this->page->context;
+        if ($titlecontext->contextlevel == 50) {
+            $this->title = get_string('listofactivities', 'block_listallcourses');
+        } else if ($titlecontext->contextlevel == 70) {
+            $this->title = get_string('activitydesc', 'block_listallcourses');
         } else {
-            $this->title = $this->config->title;
+            $this->title = get_string('pluginname', 'block_listallcourses');
         }
     }
 
@@ -131,7 +102,11 @@ class block_listallcourses extends block_base {
         return [ 'all' => true ];
     }
 
-    public function _self_test() {
+    /**
+     * Summary of _self_test
+     * @return bool
+     */
+    public function self_test() {
         return true;
     }
 }
